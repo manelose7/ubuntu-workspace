@@ -1,8 +1,3 @@
-# Country: China (CN)
-# IP version: IPv4
-# Delegation status: Allocated || Assigned
-# Mode: Aggregated
-#
 1.0.1.0/24
 1.0.2.0/23
 1.0.8.0/21
