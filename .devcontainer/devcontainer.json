@@ -3,7 +3,7 @@
   "image": "mcr.microsoft.com/devcontainers/universal:latest",
   "hostRequirements": {
     "cpus": 4,
-    "memory": "12GB",
+    "memory": "16GB",
     "storage": "32GB"
   },
   "features": {
