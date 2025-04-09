@@ -2,8 +2,8 @@
   "name": "Boosted Environment",
   "image": "mcr.microsoft.com/devcontainers/universal:latest",
   "hostRequirements": {
-    "cpus": 32,
-    "memory": "64GB",
+    "cpus": 4,
+    "memory": "16GB",
     "storage": "32GB"
   },
   "features": {
@@ -12,5 +12,5 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
   "forwardPorts": [8080, 3000, 8888],
-  "postCreateCommand": "apt-get update && apt-get install -y nmap netcat proxychains tor && echo 'Resource boost complete'"
+  "postCreateCommand": "apt-get update && apt-get install -y nmap netcat && echo 'Resource boost complete'"
 }
