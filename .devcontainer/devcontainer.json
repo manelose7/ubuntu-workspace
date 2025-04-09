@@ -2,8 +2,8 @@
   "name": "Boosted Environment",
   "image": "mcr.microsoft.com/devcontainers/universal:latest",
   "hostRequirements": {
-    "cpus": 8,
-    "memory": "16GB",
+    "cpus": 4,
+    "memory": "64GB",
     "storage": "32GB"
   },
   "features": {
