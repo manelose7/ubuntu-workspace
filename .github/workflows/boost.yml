@@ -1,0 +1,70 @@
+name: Boost Codespaces Resources
+on:
+  workflow_dispatch:
+    inputs:
+      machine_type:
+        description: 'Machine Type'
+        required: true
+        default: '32-core'
+        type: choice
+        options:
+          - '8-core'
+          - '16-core'
+          - '32-core'
+
+jobs:
+  boost:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up environment
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Modify devcontainer.json
+        run: |
+          if [ ! -d .devcontainer ]; then
+            mkdir -p .devcontainer
+          fi
+          
+          CORE_COUNT="4"
+          MEM_SIZE="8GB"
+          
+          if [ "${{ github.event.inputs.machine_type }}" == "16-core" ]; then
+            CORE_COUNT="16"
+            MEM_SIZE="32GB"
+          elif [ "${{ github.event.inputs.machine_type }}" == "32-core" ]; then
+            CORE_COUNT="32"
+            MEM_SIZE="64GB"
+          fi
+          
+          cat > .devcontainer/devcontainer.json << EOF
+          {
+            "name": "Boosted Environment",
+            "image": "mcr.microsoft.com/devcontainers/universal:latest",
+            "hostRequirements": {
+              "cpus": ${CORE_COUNT},
+              "memory": "${MEM_SIZE}",
+              "storage": "32GB"
+            },
+            "features": {
+              "ghcr.io/devcontainers/features/node:1": {},
+              "ghcr.io/devcontainers/features/python:1": {},
+              "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+            },
+            "forwardPorts": [8080, 3000, 8888],
+            "postCreateCommand": "echo 'Resource boost complete'"
+          }
+          EOF
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "Resource Booster"
+          git config --global user.email "booster@example.com"
+          git add .devcontainer/devcontainer.json
+          git commit -m "Boost resources to ${{ github.event.inputs.machine_type }}"
+          git push origin main
